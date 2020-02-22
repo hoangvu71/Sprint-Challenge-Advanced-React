@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react"
+import axios from "axios"
+import DisplayPlayers from "./components/DisplayPlayers";
+import useShowPlayers from "./components/hooks/useShowPlayers"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+function App(){
+  const [players, setPlayers] = useState([])
+  const [showPlayers,setShowPlayers, handleShowPlayers] = useShowPlayers(10);
+  
+  useEffect(() => {
+    axios
+    .get("http://localhost:5000/api/players")
+    .then(res => {
+      console.log(res);
+      setPlayers(res.data)
+    })
+    .catch(err => console.log(err))
+  },[])
+    return(
+      <div>
+        <DisplayPlayers handleShowPlayers={handleShowPlayers} data={players} showPlayers={showPlayers}/>
+      </div>
+    )
+  }
 
-export default App;
+
+
+
+export default App
